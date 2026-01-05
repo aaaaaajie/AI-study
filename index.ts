@@ -1,7 +1,7 @@
 import { MemoryVectorStore } from "@langchain/classic/vectorstores/memory";
 import { OpenAIEmbeddings, ChatOpenAI } from "@langchain/openai";
 
-const apiKey = process.env.VOLCENGINE_API_KEY || "a4d26dcc-d2f1-4d59-8ba7-82a7bb6229cb";
+const apiKey = process.env.VOLCENGINE_API_KEY;
 if (!apiKey) {
     console.error("请先设置环境变量 VOLCENGINE_API_KEY");
     console.error("示例: VOLCENGINE_API_KEY=xxx npm run dev -- \"今天天气如何？\"");
