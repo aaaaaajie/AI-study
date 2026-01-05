@@ -1,7 +1,6 @@
 import { MemoryVectorStore } from "@langchain/classic/vectorstores/memory";
 import { OpenAIEmbeddings, ChatOpenAI } from "@langchain/openai";
 
-// 1. 基础环境检查
 const apiKey = process.env.VOLCENGINE_API_KEY || "a4d26dcc-d2f1-4d59-8ba7-82a7bb6229cb";
 if (!apiKey) {
     console.error("请先设置环境变量 VOLCENGINE_API_KEY");
@@ -9,24 +8,19 @@ if (!apiKey) {
     process.exit(1);
 }
 
-// 火山引擎 Ark 的 OpenAI 兼容网关配置
-// 按你的实际 endpoint ID 替换下面两个 model 值
 const VOLC_BASE_URL = "https://ark.cn-beijing.volces.com/api/v3/";
 const CHAT_MODEL = "ep-20260106015138-zk265"; // 聊天/生成模型
 const EMBED_MODEL = "ep-20260106020301-wwzgb"; // 向量模型
 
-// 2. 初始化 Embeddings 和 向量数据库（内存）
 const embeddings = new OpenAIEmbeddings({
     apiKey,
     configuration: { baseURL: VOLC_BASE_URL },
     model: EMBED_MODEL,
-    // 防止外部网络问题导致长时间卡住，这里设置 10 秒超时
     timeout: 10_000,
 });
 
 const vectorStore = new MemoryVectorStore(embeddings);
 
-// 几条极简示例文档，你可以替换成自己的知识库
 const documents = [
     {
         pageContent:
@@ -45,7 +39,6 @@ const documents = [
     },
 ];
 
-// 3. 初始化大模型（火山引擎 OpenAI 兼容接口）
 const chatModel = new ChatOpenAI({
     apiKey,
     configuration: {
@@ -55,17 +48,14 @@ const chatModel = new ChatOpenAI({
 });
 
 async function main() {
-    // 支持从命令行读取问题: npm run dev -- "我的问题？"
     const question = process.argv[2] ?? "什么是 RAG？";
 
     console.log("用户问题:", question);
 
-    // 把文档写入内存向量库
     console.log("开始写入向量库（会调用火山 embedding 接口）...");
     await vectorStore.addDocuments(documents);
     console.log("向量库写入完成");
 
-    // 简单检索
     const retriever = vectorStore.asRetriever({ k: 1 });
     const relevantDocs = await retriever.invoke(question);
 
@@ -73,7 +63,6 @@ async function main() {
         .map((doc, i) => `【文档${i + 1}】` + doc.pageContent)
         .join("\n\n");
 
-    // 调用大模型，用检索到的文档作为上下文
     const response = await chatModel.invoke([
         {
             role: "system",
