@@ -95,7 +95,7 @@ const splitter = new RecursiveCharacterTextSplitter({
 
 ## 四、TextSplitter 到底干嘛的？
 
-Day 3 里你用的就是最常见、最稳的切分器：
+最常见、最稳的切分器：
 
 ```ts
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
@@ -158,7 +158,7 @@ RAG 正确做法是：**让模型“照资料答题”，资料没有就说不�
 {{question}}
 ```
 
-在你的 Day 3 代码里，这个思想体现在 system prompt：
+这个思想体现在 system prompt：
 
 - “必须严格根据上下文回答”
 - “没有明确答案就说我不知道”
