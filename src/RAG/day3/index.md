@@ -3,19 +3,19 @@
 
 **RAG 就像开卷考试。**
 
-大模型本身像个很聪明、但记忆可能不准的同学；RAG 的做法是：
+大模型本身像个很聪明、但记忆可能不准的同学；大致做法是：
 
 1) 先去“资料库”里翻到最相关的几页（检索）
 2) 把这几页放到题目旁边
 
 # 把「检索」升级成“可控、可解释、可复用”的 RAG 流程
 
-**从“能跑的 demo”，走向“像样的 RAG pipeline”。**，探究：
+**从“能跑的 demo”，走向“像样的 RAG pipeline”。**探究：
 
-1. ✅ 为什么必须切分文档（chunk）
-2. ✅ TextSplitter 是干嘛的（怎么切才不瞎切）
-3. ✅ Retriever 是什么（比 similaritySearch 更适合写成流程）
-4. ✅ 用 Prompt 把「资料 + 问题」正确喂给模型（不然你以为是 RAG，其实是“裸问”）
+1. 为什么必须切分文档（chunk）
+2. TextSplitter 是干嘛的（怎么切才不瞎切）
+3. Retriever 是什么（比 similaritySearch 更适合写成流程）
+4. 用 Prompt 把「资料 + 问题」正确喂给模型（不然你以为是 RAG，其实是“裸问”）
 
 对应可跑代码在 [src/RAG/day3/index.ts](./index.ts)。
 
@@ -23,7 +23,7 @@
 
 ## 一、为什么 Day 2 的代码“还不够 RAG”
 
-Day 2 往往长这样：问题 → 向量搜索 → 把结果丢给模型。
+Day 2 是这样：问题 → 向量搜索 → 把结果丢给模型。
 
 看起来像 RAG，但一上强度就会暴露问题：
 
@@ -32,9 +32,7 @@ Day 2 往往长这样：问题 → 向量搜索 → 把结果丢给模型。
 - embedding 会把多个主题糊在一起，检索变不准
 - 上下文太长，token 成本直接爆炸
 
-所以 Day 3 的核心升级点就一句话：
-
-**先把资料拆成“语义块”，再做检索和喂给模型。**
+所以 Day 3 的核心升级点是：**先把资料拆成“语义块”，再做检索和喂给模型。**
 
 ---
 
@@ -86,8 +84,6 @@ const splitter = new RecursiveCharacterTextSplitter({
 });
 ```
 
-怎么解释这俩参数最通俗：
-
 - `chunkSize`：每页大概多长
 - `chunkOverlap`：翻页时把页尾抄到下一页一点点（避免一句话被腰斩）
 
@@ -121,12 +117,12 @@ const splitDocs = await splitter.splitDocuments(
 await vectorStore.similaritySearch(question, 2);
 ```
 
-它的问题不是“不能用”，而是：
+它的问题是：
 
 - 你很难把它当成一个组件去替换/组合
 - 写着写着就很难串成 pipeline
 
-Day 3 改成 Retriever 之后，RAG 的“形状”就对了：
+Day 3 改成 Retriever 之后，才是标准 RAG 的“形状”：
 
 ```ts
 const retriever = vectorStore.asRetriever({ k: 2 });
