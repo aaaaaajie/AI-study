@@ -41,18 +41,24 @@ Day 2 往往长这样：问题 → 向量搜索 → 把结果丢给模型。
 ## 二、RAG 的两段路：建库（Indexing）+ 问答（Query）
 
 ```mermaid
-flowchart LR
-  subgraph I[建库 Indexing：把资料变成“可检索”]
-    I1[原始文档 Documents] --> I2[切分 TextSplitter]
-    I2 --> I3[向量化 Embeddings（网络请求）]
-    I3 --> I4[写入向量库 VectorStore]
+flowchart TB
+  subgraph I[建库 Indexing：把资料变成“可检索”】【离线/预处理】]
+    direction TB
+    I1[原始文档 Documents]
+    I2[切分 TextSplitter]
+    I3[向量化 Embeddings（网络请求）]
+    I4[写入向量库 VectorStore]
+    I1 --> I2 --> I3 --> I4
   end
 
-  subgraph Q[问答 Query：给问题找“最相关的几页”]
-    Q1[用户问题 Question] --> Q2[检索 Retriever（top-k）]
-    Q2 --> Q3[拼上下文 Context]
-    Q3 --> Q4[Prompt：资料 + 问题]
-    Q4 --> Q5[LLM 生成答案]
+  subgraph Q[问答 Query：给问题找“最相关的几页”】【在线/实时】]
+    direction TB
+    Q1[用户问题 Question]
+    Q2[检索 Retriever（top-k）]
+    Q3[拼上下文 Context]
+    Q4[Prompt：资料 + 问题]
+    Q5[LLM 生成答案]
+    Q1 --> Q2 --> Q3 --> Q4 --> Q5
   end
 
   I4 --> Q2

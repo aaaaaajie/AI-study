@@ -19,7 +19,7 @@ flowchart TB
   docs --> prompt[增强数据：拼 Prompt（资料+问题）]
   prompt --> llm[传给 LLM]
   llm --> out[输出结果]
-  out --> end((结束))
+  out --> done((结束))
 
   subgraph prep[准备阶段（建库）]
     d0[准备文档] --> e0[初始化 embeddings]
