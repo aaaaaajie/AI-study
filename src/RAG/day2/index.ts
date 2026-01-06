@@ -11,8 +11,8 @@ if (!apiKey) {
 }
 
 const VOLC_BASE_URL = process.env.VOLC_BASE_URL ?? "https://ark.cn-beijing.volces.com/api/v3";
-const CHAT_MODEL = process.env.VOLC_CHAT_MODEL ?? ""; // ep-xxx
-const EMBED_MODEL = process.env.VOLC_EMBED_MODEL ?? ""; // ep-xxx
+const CHAT_MODEL = process.env.VOLC_CHAT_MODEL ?? "";
+const EMBED_MODEL = process.env.VOLC_EMBED_MODEL ?? "";
 const EMBED_TIMEOUT_MS = Number(process.env.VOLC_EMBED_TIMEOUT_MS ?? "10000");
 const CHAT_TIMEOUT_MS = Number(process.env.VOLC_CHAT_TIMEOUT_MS ?? "15000");
 
