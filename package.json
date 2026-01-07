@@ -7,7 +7,8 @@
     "dev": "tsx index.ts",
     "rag:day2": "tsx ./src/RAG/day2",
     "rag:day3": "tsx ./src/RAG/day3",
-    "rag:day4": "tsx ./src/RAG/day4"
+    "rag:day4": "tsx ./src/RAG/day4",
+    "rag:day5": "tsx ./src/RAG/day5"
   },
   "dependencies": {
     "@langchain/community": "^1.1.1",

@@ -7,3 +7,5 @@ AI 学习计划和实践：
 - 模型：火山引擎 Ark
 
 
+## RAG
+![](./asset/plan.png)
