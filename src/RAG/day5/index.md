@@ -31,16 +31,17 @@ Day 5 的核心就是给 RAG 加上**质量闸门（Quality Gate）**和**多路
 
 ```mermaid
 flowchart TB
-	Q[answer(question)] --> I[initKnowledgeBase（只做一次）]
-	I --> S[semanticRetrieveWithScores（语义检索 + 打分）]
-	S --> T[quality gate：相似度阈值过滤]
-	I --> K[keywordRetrieveWithScores（关键词检索）]
-	T --> H[hybridRetrieve：合并/去重/排序]
+	U["question"] --> Q["answer"]
+	Q --> I["initKnowledgeBase - 只做一次"]
+	I --> S["semanticRetrieveWithScores - 语义检索 + 打分"]
+	S --> T["quality gate - 相似度阈值过滤"]
+	I --> K["keywordRetrieveWithScores - 关键词检索"]
+	T --> H["hybridRetrieve - 合并/去重/排序"]
 	K --> H
-	H --> E{docs 是否为空？}
-	E -- 是 --> F[系统兜底：返回“我不知道”】【确定性】]
-	E -- 否 --> C[build context：拼上下文]
-	C --> L[LLM.invoke：只能基于上下文回答]
+	H --> E{"docs 是否为空"}
+	E -- "是" --> F["系统兜底 - 返回 我不知道 - 确定性"]
+	E -- "否" --> C["build context - 拼上下文"]
+	C --> L["LLM.invoke - 只能基于上下文回答"]
 ```
 
 一句话：**Day 5 不是让模型更聪明，而是让“给模型的上下文”更可靠。**
