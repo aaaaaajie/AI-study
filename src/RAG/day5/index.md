@@ -30,18 +30,22 @@ Day 5 的核心就是给 RAG 加上**质量闸门（Quality Gate）**和**多路
 把 Day 5 的实现想成一个更“谨慎”的 `answer(question)`：
 
 ```mermaid
-flowchart TB
-	U["question"] --> Q["answer"]
-	Q --> I["initKnowledgeBase - 只做一次"]
-	I --> S["semanticRetrieveWithScores - 语义检索 + 打分"]
-	S --> T["quality gate - 相似度阈值过滤"]
-	I --> K["keywordRetrieveWithScores - 关键词检索"]
-	T --> H["hybridRetrieve - 合并/去重/排序"]
-	K --> H
-	H --> E{"docs 是否为空"}
-	E -- "是" --> F["系统兜底 - 返回 我不知道 - 确定性"]
-	E -- "否" --> C["build context - 拼上下文"]
-	C --> L["LLM.invoke - 只能基于上下文回答"]
+graph TB
+  question["用户问题"] --> answer["answer 函数"]
+  answer --> initKnowledgeBase["初始化知识库 - 只做一次"]
+
+  initKnowledgeBase --> semanticRetrieveWithScores["语义检索 - 打分"]
+  semanticRetrieveWithScores --> qualityGate["质量闸门 - 相似度阈值过滤"]
+
+  initKnowledgeBase --> keywordRetrieveWithScores["关键词检索 - 精确命中"]
+
+  qualityGate --> hybridRetrieve["混合检索 - 合并 去重 排序"]
+  keywordRetrieveWithScores --> hybridRetrieve
+
+  hybridRetrieve --> docsEmpty{"过滤后是否为空"}
+  docsEmpty -- "是" --> fallback["系统兜底 - 返回 我不知道"]
+  docsEmpty -- "否" --> buildContext["拼上下文"]
+  buildContext --> llmInvoke["调用大模型 - 只能基于上下文回答"]
 ```
 
 一句话：**Day 5 不是让模型更聪明，而是让“给模型的上下文”更可靠。**
