@@ -1,7 +1,9 @@
-# rag-demo
+# AI Study
 
-一个用于学习/演示 RAG（Retrieval Augmented Generation，检索增强生成）的最小 TypeScript 项目：
+AI 学习计划和实践：
+- 计划：plan.md
+- 实践代码：index.ts
+- 总结：index.md
+- 模型：火山引擎 Ark
 
-- 向量库：LangChain `MemoryVectorStore`
-- Embedding/Chat：通过 OpenAI 兼容 SDK 调用火山引擎 Ark
 
